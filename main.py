@@ -1,13 +1,17 @@
+import os
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-BOT_TOKEN = "7711618135:AAGb8F2a3bPCjIZp--eZ0Ym1cHpwVqtnkXI"
+# ✅ Token নেয়া হচ্ছে environment variable থেকে
+BOT_TOKEN = os.environ.get("7711618135:AAGb8F2a3bPCjIZp--eZ0Ym1cHpwVqtnkXI")
 
-def start(update: Update, context: CallbackContext):
-    update.message.reply_text("👋 হ্যালো! আমি চালু আছি!")
+# ✅ /start কমান্ডের কাজ
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("👋 স্বাগতম! আমি O.R Cash Bot!")
 
-updater = Updater(BOT_TOKEN)
-dp = updater.dispatcher
-dp.add_handler(CommandHandler("start", start))
-updater.start_polling()
-updater.idle()
+# ✅ অ্যাপ তৈরি এবং হ্যান্ডলার অ্যাড
+app = ApplicationBuilder().token(BOT_TOKEN).build()
+app.add_handler(CommandHandler("start", start))
+
+# ✅ বট চালু করা
+app.run_polling()
